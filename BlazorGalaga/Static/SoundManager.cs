@@ -56,8 +56,6 @@ namespace BlazorGalaga.Static
         {
             Sounds = new List<Sound>();
 
-            Howl.Load();
-
             // Register callbacks
             Howl.OnPlay += e =>
             {
@@ -87,8 +85,11 @@ namespace BlazorGalaga.Static
 
         public static void StopAllSounds()
         {
-            Howl.Stop();
-            Sounds.ForEach(a => Howl.Pause(a.SoundId));
+            Sounds.ForEach(a => {
+                Howl.Stop(a.SoundId);
+                a.IsPlaying = false;
+            });
+            Sounds.Clear();
         }
 
         public static async void PlaySound(SoundManagerSounds sound, bool oneatatime = false,bool excludefrommute=false)
